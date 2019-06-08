@@ -10,36 +10,52 @@
 
 <body class="h-100">
 
-	<div class="card" th:fragment="form(buttonText, action)">
+	<div class="card" th:fragment="form(buttonText, action, readonly)">
 		<form class="card-body needs-validation" novalidate method="POST" th:action="${action}" th:object="${form}">
 
 			<div class="form-group form-row">
 				<label class="col-4" for="username">アカウント</label>
-				<div class="col">
+				<div class="col" th:unless="${readonly}">
 					<input class="form-control" th:field="*{username}" th:errorclass="is-invalid">
 					<div class="invalid-feedback" th:each="err,st : ${#lists.sort(#fields.errors('username'))}" th:text="${err}" th:if="${st.index == 0}">エラーメッセージが出力されます</div>
+				</div>
+				<div class="col" th:if="${readonly}">
+					<div class="form-control" th:text="*{username}"></div>
 				</div>
 			</div>
 			<div class="form-group form-row">
 				<label class="col-4" for="password">パスワード</label>
-				<div class="col">
+				<div class="col" th:unless="${readonly}">
 					<input type="text" class="form-control" th:field="*{password}" th:errorclass="is-invalid" th:type="password">
 					<div class="invalid-feedback" th:each="err,st : ${#lists.sort(#fields.errors('password'))}" th:text="${err}" th:if="${st.index == 0}">エラーメッセージが出力されます</div>
+				</div>
+				<div class="col" th:if="${readonly}">
+					<div class="form-control">**********</div>
 				</div>
 			</div>
 			<div class="form-group form-row">
 				<label class="col-4" for="email">メールアドレス</label>
-				<div class="col">
+				<div class="col" th:unless="${readonly}">
 					<input class="form-control" th:field="*{email}" th:errorclass="is-invalid">
 					<div class="invalid-feedback" th:each="err,st : ${#lists.sort(#fields.errors('email'))}" th:text="${err}" th:if="${st.index == 0}">エラーメッセージが出力されます</div>
 				</div>
+				<div class="col" th:if="${readonly}">
+					<div class="form-control" th:text="*{email}"></div>
+				</div>
 			</div>
 
-			<hr>
-
-			<div class="form-group form-row mt-5">
-				<button class="btn btn-primary btn-block btn-lg" th:text="${buttonText}">ボタン</button>
+			<div class="form-group form-row" th:if="${buttonText}">
+				<th:block th:if="${buttonText == '削除'}">
+					<button class="btn btn-danger btn-block btn-lg" th:text="${buttonText}">ボタン</button>
+				</th:block>
+				<th:block th:unless="${buttonText == '削除'}">
+					<button class="btn btn-primary btn-block btn-lg" th:text="${buttonText}">ボタン</button>
+				</th:block>
 			</div>
+
+			<th:block th:if="${buttonText == '削除'}">
+				<div th:replace="layout::dialog('delete_confime', '削除の確認', '現在表示中の情報を削除します。<br/>よろしですか?')"></div>
+			</th:block>
 		</form>
 	</div>
 

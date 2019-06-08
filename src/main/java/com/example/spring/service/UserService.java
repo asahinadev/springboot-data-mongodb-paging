@@ -8,6 +8,9 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,9 +33,14 @@ public class UserService
 	@Autowired
 	PasswordEncoder passwordEncoder;
 
-	public List<User> findAll() {
+	public Page<User> findAll() {
+		Pageable page = PageRequest.of(0, 10);
+		return userRepository.findAll(page);
+	}
 
-		return userRepository.findAll();
+	public Page<User> findAll(Pageable page) {
+
+		return userRepository.findAll(page);
 	}
 
 	public User findById(String id) {
@@ -97,12 +105,7 @@ public class UserService
 
 	public void delete(User entity) {
 
-		User old = userRepository.findById(entity.getId()).orElseThrow();
-
-		if (!StringUtils.equals(entity.getPassword(), old.getPassword())) {
-			changePassword(entity);
-		}
-
+		userRepository.findById(entity.getId()).orElseThrow();
 		userRepository.delete(entity);
 	}
 

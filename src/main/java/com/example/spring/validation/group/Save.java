@@ -1,5 +1,6 @@
 package com.example.spring.validation.group;
 
-public interface Save {
+public interface Save
+		extends Create {
 
 }

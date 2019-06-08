@@ -19,15 +19,15 @@
 		<div class="row">
 			<h2 class="col-10">ユーザー一覧</h2>
 			<div class="col">
-				<a href="@{/user/create}" class="btn btn-info btn-block">新規登録</a>
+				<a th:href="@{/user/create}" class="btn btn-info btn-block">新規登録</a>
 			</div>
 		</div>
-
 
 		<div th:replace="layout::alert_success(${success})">処理成功時のメッセージ</div>
 		<div th:replace="layout::alert_danger(${message})">処理失敗時のメッセージ</div>
 
-		<table class="table table-bordered table-sm" id="users" data-info="false" data-paging="false" data-searching="false" data-ordering="false">
+		<table class="table table-bordered table-sm" id="users" data-info="false" data-paging="false" data-searching="false" data-ordering="false"
+			data-scrollY="200px" data-scrollCollapse="true">
 			<thead>
 				<tr>
 					<th>アカウント</th>
@@ -60,6 +60,28 @@
 				</tr>
 			</tbody>
 		</table>
+
+
+		<ul class="pagination">
+
+			<li class="page-item" th:each="page : ${paging}"
+				th:classappend="${(page.value == '#' ? 'disabled ' : '' ) + (page.value == '#CURRENT' ? 'active' : '' ) }">
+				<!-- -->
+				<span class="page-link" th:text="${page.key}" th:if="${page.value == '#'}">*</span>
+				<!-- -->
+				<a class="page-link" th:text="${page.key}" th:href="${page.value}" th:unless="${page.value == '#'}">*</a>
+			</li>
+
+		</ul>
+
+		<div>
+			<!--  -->
+			現在 <span class="px-1" th:text="${users.getNumber()+1}">0</span>ページ／
+			<!--  -->
+			全体 <span class="px-1" th:text="${users.getTotalPages()}">0</span>ページ／
+			<!--  -->
+			<span class="px-1" th:text="${users.getNumberOfElements()}">0</span>件表示中
+		</div>
 
 	</section>
 </body>

@@ -1,12 +1,16 @@
 package com.example.spring.controller;
 
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.groups.Default;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -24,7 +28,6 @@ import com.example.spring.entity.User;
 import com.example.spring.form.UserForm;
 import com.example.spring.service.UserService;
 import com.example.spring.validation.group.Create;
-import com.example.spring.validation.group.Save;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,27 +37,18 @@ import lombok.extern.slf4j.Slf4j;
 public class UsersController {
 
 	public static final String URI_PREFIX = "/user";
-
 	public static final String TPL_PREFIX = "user/";
-
 	public static final String PAGE_INDEX = "index";
-
 	public static final String PAGE_CREATE = "create";
-
 	public static final String PAGE_MODIFY = "modify";
-
 	public static final String PAGE_DELETE = "delete";
-
 	public static final String PAGE_VIEW = "view";
-
 	public static final String PATH_INDEX = "";
-
+	public static final String PATH_PAGE = "/page/{page}";
+	public static final String PATH_TEST = "test";
 	public static final String PATH_CREATE = "/create";
-
 	public static final String PATH_MODIFY = "/modify/{id}";
-
 	public static final String PATH_DELETE = "/delete/{id}";
-
 	public static final String PATH_VIEW = "/view/{id}";
 
 	@Autowired
@@ -76,6 +70,29 @@ public class UsersController {
 
 	}
 
+	//	/**
+	//	 * index ページ用.
+	//	 * 
+	//	 * @param request リクエスト情報.
+	//	 * @return 画面表示用ワード（テンプレート、リダイレクト）.
+	//	 */
+	//	@GetMapping(PATH_TEST)
+	//	public String test(HttpServletRequest request) {
+	//
+	//		String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYYMMddHHmmss"));
+	//		List<User> users = service.findAll();
+	//		for (int i = 0; i < 1000; i++) {
+	//			User user = new User();
+	//			user.setUsername(now + String.format("%06d", i));
+	//			user.setEmail(now + String.format("%06d@example.com", i));
+	//			user.setPassword(UUID.randomUUID().toString());
+	//			users.add(user);
+	//		}
+	//		service.insert(users);
+	//		return "redirect:"
+	//				+ UriComponentsBuilder.fromPath(URI_PREFIX + PATH_INDEX).toUriString();
+	//	}
+
 	/**
 	 * index ページ用.
 	 * 
@@ -84,14 +101,69 @@ public class UsersController {
 	 */
 	@GetMapping(PATH_INDEX)
 	public String index(HttpServletRequest request) {
+		return index(request, 1);
+	}
 
-		List<User> users = service.findAll();
+	/**
+	 * index ページ用.
+	 * 
+	 * @param request リクエスト情報.
+	 * @return 画面表示用ワード（テンプレート、リダイレクト）.
+	 */
+	@GetMapping(PATH_PAGE)
+	public String index(HttpServletRequest request, @PathVariable("page") Integer page) {
+		log.debug("page {}", page);
+		PageRequest pageRequest = PageRequest.of(0, 10);
+		if (page != null) {
+			pageRequest = PageRequest.of(Math.max(page - 1, 0), 10);
+		}
+
+		Page<User> users = service.findAll(pageRequest);
 		log.debug("{}", users);
+
+		Map<String, String> paging = new LinkedHashMap<>();
+
+		int start = Math.max(users.getPageable().getPageNumber() - 5, 0);
+		int end = start + 10;
+
+		if (end > 10 && users.getTotalPages() < end) {
+			end = users.getTotalPages();
+			start = end - 10;
+		}
+
+		log.debug("start => {}", start);
+		log.debug("end   => {}", end);
+		log.debug("total => {}", users.getTotalPages());
+
+		put(paging, "First", 1, users.isFirst());
+		put(paging, "Prev", page - 1, !users.hasPrevious());
+		for (int i = start + 1; i <= end; i++) {
+			if (i == page) {
+				put(paging, i, -1, i > users.getTotalPages());
+			} else {
+				put(paging, i, i, i > users.getTotalPages());
+			}
+		}
+		put(paging, "Next", Math.min(page + 1, users.getTotalPages()), !users.hasNext());
+		put(paging, "Last", users.getTotalPages(), users.isLast());
 
 		// 値の設定
 		request.setAttribute("users", users);
+		request.setAttribute("paging", paging);
+
 		return TPL_PREFIX + PAGE_INDEX;
 
+	}
+
+	private void put(Map<String, String> paging, Object key, int page, boolean disabled) {
+		String url = "#";
+		if (!disabled) {
+			url = uri(URI_PREFIX + PATH_PAGE, Math.max(page, 1));
+		}
+		if (page == -1 && key instanceof Number) {
+			url = "#CURRENT";
+		}
+		paging.put(key.toString(), url);
 	}
 
 	/**
@@ -117,7 +189,11 @@ public class UsersController {
 	 */
 	@PostMapping(PATH_CREATE)
 	public String create(
-			@Validated(Create.class) @ModelAttribute("form") UserForm form, BindingResult result,
+			@ModelAttribute("form") @Validated({
+					Default.class,
+					Create.class
+			}) UserForm form,
+			BindingResult result,
 			RedirectAttributes redirect) {
 
 		// エラー判定
@@ -172,7 +248,10 @@ public class UsersController {
 	@PostMapping(PATH_MODIFY)
 	public String modify(
 			@ModelAttribute("user") User user,
-			@Validated(Save.class) @ModelAttribute("form") UserForm form, BindingResult result,
+			@ModelAttribute("form") @Validated({
+					Default.class
+			}) UserForm form,
+			BindingResult result,
 			RedirectAttributes redirect) {
 
 		// 対象情報取得
@@ -262,5 +341,9 @@ public class UsersController {
 
 		return "redirect:"
 				+ UriComponentsBuilder.fromPath(URI_PREFIX + PATH_INDEX).toUriString();
+	}
+
+	String uri(String path, Object... args) {
+		return UriComponentsBuilder.fromPath(path).build(args).toASCIIString();
 	}
 }

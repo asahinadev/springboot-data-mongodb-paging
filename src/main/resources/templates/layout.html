@@ -90,6 +90,31 @@
 		</button>
 		[[${message}]]
 	</div>
+
+	<!-- layout::dialog(id, title, message) -->
+	<div class="modal fade" tabindex="-1" role="dialog" th:fragment="dialog(id, title, message)" th:id="${id}">
+
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+
+					<h5 class="modal-title" id="exampleModalLongTitle" th:text="${title}">Modal Title</h5>
+
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span>
+					</button>
+
+				</div>
+
+				<div class="modal-body" th:utext="${message}">...</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary">OK</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">キャンセル</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 
 </html>
