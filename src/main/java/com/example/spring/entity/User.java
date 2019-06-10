@@ -1,6 +1,6 @@
 package com.example.spring.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -43,10 +43,10 @@ public class User
 	boolean locked;
 
 	@Field("credentials_expired")
-	LocalDateTime credentialsExpired;
+	LocalDate credentialsExpired;
 
 	@Field("account_expired")
-	LocalDateTime accountExpired;
+	LocalDate accountExpired;
 
 	@Field("roles")
 	List<Roles> authorities;
@@ -66,7 +66,7 @@ public class User
 		if (accountExpired == null) {
 			return true;
 		}
-		return accountExpired.isAfter(LocalDateTime.now());
+		return accountExpired.isAfter(LocalDate.now());
 	}
 
 	@Override
@@ -81,7 +81,7 @@ public class User
 		if (credentialsExpired == null) {
 			return true;
 		}
-		return credentialsExpired.isAfter(LocalDateTime.now());
+		return credentialsExpired.isAfter(LocalDate.now());
 	}
 
 }

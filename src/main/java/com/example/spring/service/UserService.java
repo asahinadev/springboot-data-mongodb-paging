@@ -2,7 +2,7 @@ package com.example.spring.service;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -257,8 +257,8 @@ public class UserService
 
 		if (StringUtils.isNotEmpty(entity.getPassword())) {
 			entity.setPassword(passwordEncoder.encode(entity.getPassword()));
-			entity.setAccountExpired(LocalDateTime.now().plusDays(60));
-			entity.setCredentialsExpired(LocalDateTime.now().plusDays(30));
+			entity.setAccountExpired(LocalDate.now().plusDays(60));
+			entity.setCredentialsExpired(LocalDate.now().plusDays(30));
 		}
 	}
 

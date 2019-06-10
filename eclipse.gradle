@@ -19,11 +19,22 @@ eclipse.project {
 }
 
 tasks.eclipse.doFirst {
-    File prefs = file(".settings/org.eclipse.buildship.core.prefs")
+    File prefs;
+    
+    prefs = file(".settings/org.eclipse.buildship.core.prefs")
     if(!prefs.exists()){
         prefs.append('''
             connection.project.dir=
             eclipse.preferences.version=1
             '''.stripIndent())
     }
+    
+    prefs = file(".settings/org.eclipse.core.resources.prefs")
+    if(!prefs.exists()){
+        prefs.append('''
+            eclipse.preferences.version=1
+            encoding//src/main/resources/i18n/messages.properties=UTF-8
+            '''.stripIndent())
+    }
+    
 }

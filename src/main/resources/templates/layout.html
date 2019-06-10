@@ -153,7 +153,11 @@
 		<div th:if="${info}">[[${items.totalElements}]] 件中 [[${items.number * items.size + 1}]] 件から [[${items.number * items.size +
 			items.numberOfElements}]] 件まで表示</div>
 	</div>
-	</section>
+
+	<!-- layout::invalid_feedback(errors) -->
+	<th:block th:fragment="invalid_feedback(errors)">
+		<div class="invalid-feedback" th:text="${err}" th:if="${st.index == 0}" th:each="err,st : ${#lists.sort(#fields.errors(errors))}">エラーメッセージが出力されます</div>
+	</th:block>
 
 
 </body>

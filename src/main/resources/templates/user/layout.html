@@ -17,7 +17,7 @@
 				<label class="col-4" for="username">アカウント</label>
 				<div class="col" th:unless="${readonly}">
 					<input class="form-control" th:field="*{username}" th:errorclass="is-invalid">
-					<div class="invalid-feedback" th:each="err,st : ${#lists.sort(#fields.errors('username'))}" th:text="${err}" th:if="${st.index == 0}">エラーメッセージが出力されます</div>
+					<div th:replace="layout::invalid_feedback('username')"></div>
 				</div>
 				<div class="col" th:if="${readonly}">
 					<div class="form-control" th:text="*{username}"></div>
@@ -28,7 +28,7 @@
 				<label class="col-4" for="email">メールアドレス</label>
 				<div class="col" th:unless="${readonly}">
 					<input class="form-control" th:field="*{email}" th:errorclass="is-invalid">
-					<div class="invalid-feedback" th:each="err,st : ${#lists.sort(#fields.errors('email'))}" th:text="${err}" th:if="${st.index == 0}">エラーメッセージが出力されます</div>
+					<div th:replace="layout::invalid_feedback('email')"></div>
 				</div>
 				<div class="col" th:if="${readonly}">
 					<div class="form-control" th:text="*{email}"></div>
@@ -39,7 +39,7 @@
 				<label class="col-4" for="password">パスワード</label>
 				<div class="col" th:unless="${readonly}">
 					<input type="text" class="form-control" th:field="*{password}" th:errorclass="is-invalid" th:type="password">
-					<div class="invalid-feedback" th:each="err,st : ${#lists.sort(#fields.errors('password'))}" th:text="${err}" th:if="${st.index == 0}">エラーメッセージが出力されます</div>
+					<div th:replace="layout::invalid_feedback('password')"></div>
 				</div>
 				<div class="col" th:if="${readonly}">
 					<div class="form-control">**********</div>
@@ -49,12 +49,12 @@
 			<div class="form-group form-row">
 				<label class="col-4" for="enabled">アカウント状態</label>
 				<div class="col" th:unless="${readonly}">
-                    <div class="btn-group radio" data-toggle="buttons">
-                        <!--  -->
-                        <label class="btn btn-outline-secondary"><input type="radio" th:field="*{enabled}" value="true" th:text="有効"></label>
-                        <!--  -->
-                        <label class="btn btn-outline-secondary"><input type="radio" th:field="*{enabled}" value="false" th:text="無効"></label>
-                    </div>
+					<div class="btn-group radio" data-toggle="buttons">
+						<!--  -->
+						<label class="btn btn-outline-secondary"><input type="radio" th:field="*{enabled}" value="true" th:text="有効"></label>
+						<!--  -->
+						<label class="btn btn-outline-secondary"><input type="radio" th:field="*{enabled}" value="false" th:text="無効"></label>
+					</div>
 				</div>
 
 				<div class="col" th:if="${readonly}">
@@ -75,6 +75,28 @@
 
 				<div class="col" th:if="${readonly}">
 					<div class="form-control" th:text="*{locked ? '有効' : '無効' }"></div>
+				</div>
+			</div>
+
+			<div class="form-group form-row">
+				<label class="col-4" for="credentialsExpired">パスワード有効期限</label>
+				<div class="col" th:unless="${readonly}">
+					<input class="form-control" th:field="*{credentialsExpired}" th:errorclass="is-invalid" type="date">
+					<div th:replace="layout::invalid_feedback('credentialsExpired')"></div>
+				</div>
+				<div class="col" th:if="${readonly}">
+					<div class="form-control" th:text="*{credentialsExpired}"></div>
+				</div>
+			</div>
+
+			<div class="form-group form-row">
+				<label class="col-4" for="accountExpired">アカウント有効期限</label>
+				<div class="col" th:unless="${readonly}">
+					<input class="form-control" th:field="*{accountExpired}" th:errorclass="is-invalid" type="date">
+					<div th:replace="layout::invalid_feedback('accountExpired')"></div>
+				</div>
+				<div class="col" th:if="${readonly}">
+					<div class="form-control" th:text="*{credentialsExpired}"></div>
 				</div>
 			</div>
 

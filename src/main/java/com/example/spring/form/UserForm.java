@@ -1,9 +1,10 @@
 package com.example.spring.form;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.groups.Default;
@@ -39,9 +40,11 @@ public class UserForm {
 
 	Boolean locked;
 
-	LocalDateTime credentialsExpired;
+	@Future
+	LocalDate credentialsExpired;
 
-	LocalDateTime accountExpired;
+	@Future
+	LocalDate accountExpired;
 
 	List<Roles> authorities;
 }
