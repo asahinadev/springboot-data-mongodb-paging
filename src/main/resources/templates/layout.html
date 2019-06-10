@@ -132,22 +132,26 @@
 		<ul class="pagination" th:if="${paging}">
 			<th:block th:each="item : ${paging}">
 
-				<th:block th:if="${item.value == null}">
-					<li class="page-item">
+				<th:block th:switch="${item.value}">
+
+					<li class="page-item disabled" th:case="null">
 						<span class="page-link" th:text="${item.key}">*</span>
 					</li>
-				</th:block>
 
-				<th:block th:unless="${item.value == null}">
-					<li class="page-item">
+					<li class="page-item active" th:case="'#current'">
+						<span class="page-link" th:text="${item.key}">*</span>
+					</li>
+
+					<li class="page-item" th:case="*">
 						<a class="page-link" th:text="${item.key}" th:href="${item.value}">*</a>
 					</li>
-				</th:block>
 
+				</th:block>
 			</th:block>
 		</ul>
 
-		<div th:if="${info}">[[${items.totalElements}]] 件中 [[${items.number * items.size + 1}]] 件から [[${items.number * items.size + items.numberOfElements}]] 件まで表示</div>
+		<div th:if="${info}">[[${items.totalElements}]] 件中 [[${items.number * items.size + 1}]] 件から [[${items.number * items.size +
+			items.numberOfElements}]] 件まで表示</div>
 	</div>
 	</section>
 

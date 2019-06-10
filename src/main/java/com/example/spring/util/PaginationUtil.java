@@ -53,7 +53,7 @@ public class PaginationUtil<E> {
 				result.put("First", page.isFirst() ? null : uri.apply(first));
 			}
 
-			if (first != prev) {
+			if (prev != null) {
 				result.put("Prev", page.hasPrevious() ? uri.apply(prev) : null);
 			}
 
