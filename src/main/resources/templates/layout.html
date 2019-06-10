@@ -115,6 +115,43 @@
 			</div>
 		</div>
 	</div>
+
+	<!-- layout::sort(sorted, target, direction, url) -->
+	<div th:switch="${sorted == target ? direction : 'NONE' }" class="d-inline" th:fragment="sort(sorted, target, direction, url)">
+		<!--  -->
+		<a th:case="DESC" class="fas fa-sort-down" th:href="@{${url}(sort=${sorted+ ',ASC'}, size=${pageSize}, page=0)}"></a>
+		<!--  -->
+		<a th:case="ASC" class="fas fa-sort-up" th:href="@{${url}(sort=${sorted+ ',DESC'}, size=${pageSize}, page=0)}"></a>
+		<!--  -->
+		<a th:case="NONE" class="fas fa-sort" th:href="@{${url}(sort=${sorted+ ',ASC'}, size=${pageSize}, page=0)}"></a>
+	</div>
+
+
+	<!-- layout::pagination(paging, items, info) -->
+	<div class="page-info" th:fragment="pagination(paging, items, info)">
+		<ul class="pagination" th:if="${paging}">
+			<th:block th:each="item : ${paging}">
+
+				<th:block th:if="${item.value == null}">
+					<li class="page-item">
+						<span class="page-link" th:text="${item.key}">*</span>
+					</li>
+				</th:block>
+
+				<th:block th:unless="${item.value == null}">
+					<li class="page-item">
+						<a class="page-link" th:text="${item.key}" th:href="${item.value}">*</a>
+					</li>
+				</th:block>
+
+			</th:block>
+		</ul>
+
+		<div th:if="${info}">[[${items.totalElements}]] 件中 [[${items.number * items.size + 1}]] 件から [[${items.number * items.size + items.numberOfElements}]] 件まで表示</div>
+	</div>
+	</section>
+
+
 </body>
 
 </html>

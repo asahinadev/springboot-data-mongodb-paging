@@ -16,7 +16,7 @@
 
 	<section class="container mx-auto pt-5">
 
-		<div class="row">
+		<div class="row my-3">
 			<h2 class="col-10">ユーザー一覧</h2>
 			<div class="col">
 				<a th:href="@{/user/create}" class="btn btn-info btn-block">新規登録</a>
@@ -26,19 +26,26 @@
 		<div th:replace="layout::alert_success(${success})">処理成功時のメッセージ</div>
 		<div th:replace="layout::alert_danger(${message})">処理失敗時のメッセージ</div>
 
-		<table class="table table-bordered table-sm" id="users" data-info="false" data-paging="false" data-searching="false" data-ordering="false"
-			data-scrollY="200px" data-scrollCollapse="true">
+		<div th:replace="layout::pagination(${paging}, ${users}, false)"></div>
+
+		<table class="table table-striped" id="users">
 			<thead>
 				<tr>
-					<th>アカウント</th>
-					<th>メール</th>
+					<th>
+						アカウント
+						<div th:replace="layout::sort(${sorted}, 'username', ${direction}, '/user')"></div>
+					</th>
+					<th>
+						メール
+						<div th:replace="layout::sort(${sorted}, 'email', ${direction}, '/user')"></div>
+					</th>
 					<th>有効</th>
 					<th>権限</th>
 					<th>アクション</th>
 				</tr>
 			</thead>
-			<tbody th:each="user : ${users}" th:object="${user}">
-				<tr>
+			<tbody>
+				<tr th:each="user : ${users}" th:object="${user}">
 					<td class="text-left" th:text="*{username}">USERNAME</td>
 					<td class="text-left" th:text="*{email}">EMAIL</td>
 					<td class="text-center" th:text="*{enabled}">ACCEPT</td>
@@ -61,29 +68,32 @@
 			</tbody>
 		</table>
 
+		<div th:replace="layout::pagination(${paging}, ${users}, true)"></div>
+	</section>
 
-		<ul class="pagination">
+	<section class="container mt-5">
+		<div class="card">
+			<h2 class="card-heading">ファイルアップロード</h2>
+			<form th:action="@{/user/upload/csv}" enctype="multipart/form-data" class="card-body" method="post">
 
-			<li class="page-item" th:each="page : ${paging}"
-				th:classappend="${(page.value == '#' ? 'disabled ' : '' ) + (page.value == '#CURRENT' ? 'active' : '' ) }">
-				<!-- -->
-				<span class="page-link" th:text="${page.key}" th:if="${page.value == '#'}">*</span>
-				<!-- -->
-				<a class="page-link" th:text="${page.key}" th:href="${page.value}" th:unless="${page.value == '#'}">*</a>
-			</li>
 
-		</ul>
+				<div class="form-group form-row">
+					<!--  -->
+					<label class="form-control col-10" for="file" id="file_text">&nbsp;</label>
+					<!--  -->
+					<label class="btn btn-info btn-block col-2" for="file">ファイル選択 </label>
+				</div>
 
-		<div>
-			<!--  -->
-			現在 <span class="px-1" th:text="${users.getNumber()+1}">0</span>ページ／
-			<!--  -->
-			全体 <span class="px-1" th:text="${users.getTotalPages()}">0</span>ページ／
-			<!--  -->
-			<span class="px-1" th:text="${users.getNumberOfElements()}">0</span>件表示中
+				<input type="file" id="file" name="file" class="d-none" onchange="$('#file_text').text($(this).val())">
+
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-block">アップロード</button>
+				</div>
+			</form>
 		</div>
 
 	</section>
+
 </body>
 
 </html>

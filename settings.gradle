@@ -3,4 +3,4 @@ pluginManagement {
 		gradlePluginPortal()
 	}
 }
-rootProject.name = 'cms-mongodb'
+rootProject.name = 'spring-demo-paging'

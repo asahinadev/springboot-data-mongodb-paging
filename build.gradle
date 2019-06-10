@@ -5,7 +5,7 @@ plugins {
 }
 
 apply plugin: 'io.spring.dependency-management'
-apply plugin: 'eclipse'
+apply from: 'eclipse.gradle'
 
 group = 'com.example.spring'
 version = '0.0.1'
@@ -40,6 +40,7 @@ dependencies {
     implementation 'org.webjars:webjars-locator-core:0.37'
     implementation 'org.webjars:font-awesome:5.8.2'
     implementation 'org.webjars:datatables-fixedheader:3.1.4'
+    implementation 'org.apache.commons:commons-csv:1.7'
 
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
     developmentOnly 'org.springframework.boot:spring-boot-starter-tomcat'

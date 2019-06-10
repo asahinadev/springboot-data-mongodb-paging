@@ -1,5 +1,7 @@
 package com.example.spring.validation.group;
 
-public interface Create {
+import javax.validation.groups.Default;
+
+public interface Create extends Default {
 
 }
