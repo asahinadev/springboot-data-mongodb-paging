@@ -6,8 +6,7 @@ function dispLoading(msg) {
 	}
 
 	// ローディング画像が表示されていない場合のみ出力
-	
-	
+
 	if ($("#loading").length == 0) {
 		$("body").append(
 				$("<div>").attr("id", "loading").append(
@@ -20,19 +19,17 @@ function dispLoading(msg) {
 }
 
 function closeLoading() {
-	setTimeout(() => {
+	setTimeout(function() {
 		$("#loading").remove();
 		console.log("hide");
 	}, 10);
 }
 
-setTimeout(() => {
+setTimeout(function() {
 	dispLoading("初期化中");
 }, 10);
 
-
 $(function() {
-
 
 	$(".table").DataTable({
 		scrollY : "450px",
@@ -68,14 +65,24 @@ $(function() {
 	});
 
 	$(document).on("submit", "form", function() {
-		dispLoading("送信中");	
+		dispLoading("送信中");
 	});
-	
-	$(".btn-group.radio :checked").each(function(i, e){
+
+	$(".btn-group.radio :checked").each(function(i, e) {
 		$(this).parent(".btn").addClass("active");
 	});
 
-	closeLoading();
-	
+	if (!Modernizr.inputtypes["date"]) {
+		$('input[type=date]').datepicker({
+			format : 'yyyy-mm-dd'
+		});
+	}
 
+	if (!Modernizr.inputtypes["datetime-local"]) {
+		$('input[type=datetime-local]').datepicker({
+			format : 'yyyy-mm-dd'
+		});
+	}
+
+	closeLoading();
 });
