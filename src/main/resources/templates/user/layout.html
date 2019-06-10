@@ -23,6 +23,18 @@
 					<div class="form-control" th:text="*{username}"></div>
 				</div>
 			</div>
+
+			<div class="form-group form-row">
+				<label class="col-4" for="email">メールアドレス</label>
+				<div class="col" th:unless="${readonly}">
+					<input class="form-control" th:field="*{email}" th:errorclass="is-invalid">
+					<div class="invalid-feedback" th:each="err,st : ${#lists.sort(#fields.errors('email'))}" th:text="${err}" th:if="${st.index == 0}">エラーメッセージが出力されます</div>
+				</div>
+				<div class="col" th:if="${readonly}">
+					<div class="form-control" th:text="*{email}"></div>
+				</div>
+			</div>
+
 			<div class="form-group form-row">
 				<label class="col-4" for="password">パスワード</label>
 				<div class="col" th:unless="${readonly}">
@@ -33,14 +45,36 @@
 					<div class="form-control">**********</div>
 				</div>
 			</div>
+
 			<div class="form-group form-row">
-				<label class="col-4" for="email">メールアドレス</label>
+				<label class="col-4" for="enabled">アカウント状態</label>
 				<div class="col" th:unless="${readonly}">
-					<input class="form-control" th:field="*{email}" th:errorclass="is-invalid">
-					<div class="invalid-feedback" th:each="err,st : ${#lists.sort(#fields.errors('email'))}" th:text="${err}" th:if="${st.index == 0}">エラーメッセージが出力されます</div>
+                    <div class="btn-group radio" data-toggle="buttons">
+                        <!--  -->
+                        <label class="btn btn-outline-secondary"><input type="radio" th:field="*{enabled}" value="true" th:text="有効"></label>
+                        <!--  -->
+                        <label class="btn btn-outline-secondary"><input type="radio" th:field="*{enabled}" value="false" th:text="無効"></label>
+                    </div>
 				</div>
+
 				<div class="col" th:if="${readonly}">
-					<div class="form-control" th:text="*{email}"></div>
+					<div class="form-control" th:text="*{enabled ? '有効' : '無効' }"></div>
+				</div>
+			</div>
+
+			<div class="form-group form-row">
+				<label class="col-4" for="locked">ロック状態</label>
+				<div class="col" th:unless="${readonly}">
+					<div class="btn-group radio" data-toggle="buttons">
+						<!--  -->
+						<label class="btn btn-outline-secondary"><input type="radio" th:field="*{locked}" value="true" th:text="有効"></label>
+						<!--  -->
+						<label class="btn btn-outline-secondary"><input type="radio" th:field="*{locked}" value="false" th:text="無効"></label>
+					</div>
+				</div>
+
+				<div class="col" th:if="${readonly}">
+					<div class="form-control" th:text="*{locked ? '有効' : '無効' }"></div>
 				</div>
 			</div>
 

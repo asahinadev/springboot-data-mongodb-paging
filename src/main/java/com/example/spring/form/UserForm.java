@@ -35,9 +35,9 @@ public class UserForm {
 	@Length(min = 8, max = 16, groups = Default.class)
 	String password;
 
-	boolean enabled;
+	Boolean enabled;
 
-	boolean locked;
+	Boolean locked;
 
 	LocalDateTime credentialsExpired;
 

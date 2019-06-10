@@ -70,6 +70,10 @@ $(function() {
 	$(document).on("submit", "form", function() {
 		dispLoading("送信中");	
 	});
+	
+	$(".btn-group.radio :checked").each(function(i, e){
+		$(this).parent(".btn").addClass("active");
+	});
 
 	closeLoading();
 	

@@ -36,3 +36,7 @@ td.row>div.col>a.btn {
 	padding-top: 140px;
 	background: url("../images/gif-load.gif") center center no-repeat;
 }
+
+.btn>[type=radio] {
+	display: none;
+}
