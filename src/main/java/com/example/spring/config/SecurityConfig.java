@@ -65,7 +65,7 @@ public class SecurityConfig
 				"/error/**",
 				"/css/**",
 				"/js/**",
-				"/image/**",
+				"/images/**",
 				"/favicon.ico"
 
 		);

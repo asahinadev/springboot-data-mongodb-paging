@@ -1,5 +1,6 @@
 package com.example.spring.service;
 
+import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -81,8 +83,9 @@ public class UserService
 		return userRepository.findByEmail(email);
 	}
 
+	@Async
 	@SneakyThrows
-	public List<User> insert(MultipartFile file) {
+	public void insert(MultipartFile file, byte[] buffer) {
 
 		log.debug("file          {}", file);
 		log.debug("file size     {}", file.getSize());
@@ -91,7 +94,7 @@ public class UserService
 		log.debug("file original {}", file.getOriginalFilename());
 
 		try (CSVParser parser = CSVParser.parse(
-				file.getInputStream(),
+				new ByteArrayInputStream(buffer),
 				StandardCharsets.UTF_8,
 				CSVFormat.EXCEL.withFirstRecordAsHeader())) {
 
@@ -124,7 +127,7 @@ public class UserService
 				log.info("csv user {}", user);
 				return user;
 			}).collect(Collectors.toList());
-			return insert(users);
+			insert(users);
 		}
 
 	}

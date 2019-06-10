@@ -147,7 +147,7 @@ public class UsersController {
 			RedirectAttributes redirect) {
 
 		// CSV インサート
-		service.insert(file);
+		service.insert(file, file.getBytes());
 
 		// リダイレクト
 		redirect.addFlashAttribute("success", "登録に成功しました。");

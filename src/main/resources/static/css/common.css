@@ -17,3 +17,22 @@ td.row>div.col>a.btn {
 	line-height: 1.5;
 	border-radius: .2rem;
 }
+
+#loading {
+	display: table;
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	background-color: #fff;
+	opacity: 0.8;
+}
+
+#loading .loadingMsg {
+	display: table-cell;
+	text-align: center;
+	vertical-align: middle;
+	padding-top: 140px;
+	background: url("../images/gif-load.gif") center center no-repeat;
+}

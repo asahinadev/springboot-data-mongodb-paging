@@ -1,4 +1,38 @@
+function dispLoading(msg) {
+
+	// 引数なし（メッセージなし）を許容
+	if (msg == undefined) {
+		msg = "";
+	}
+
+	// ローディング画像が表示されていない場合のみ出力
+	
+	
+	if ($("#loading").length == 0) {
+		$("body").append(
+				$("<div>").attr("id", "loading").append(
+						$("<div>").addClass("loadingMsg").text(msg)).show());
+
+		console.log("show");
+	} else {
+		console.log("aborted");
+	}
+}
+
+function closeLoading() {
+	setTimeout(() => {
+		$("#loading").remove();
+		console.log("hide");
+	}, 10);
+}
+
+setTimeout(() => {
+	dispLoading("初期化中");
+}, 10);
+
+
 $(function() {
+
 
 	$(".table").DataTable({
 		scrollY : "450px",
@@ -32,5 +66,12 @@ $(function() {
 		form.submit();
 
 	});
+
+	$(document).on("submit", "form", function() {
+		dispLoading("送信中");	
+	});
+
+	closeLoading();
+	
 
 });
